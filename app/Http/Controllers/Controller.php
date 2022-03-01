@@ -93,10 +93,15 @@ class Controller extends BaseController
             'session_id' => Session::get('team')->session
         ]);
 
-        if($response->status() === 201) {
-            return back()->with('success', $response->object()->message);
-        } else {
-            return back()->with('danger', $response->object()->message);
+        try{
+            if($response->status() === 201) {
+                return back()->with('success', $response->object()->message);
+            } else {
+                return back()->with('danger', $response->object()->message);
+            }
+        } catch(\Exception $exception) {
+            return back()->with('warning', "Error. Please see society staff" . $exception);
         }
+
     }
 }
