@@ -54,8 +54,12 @@ class Controller extends BaseController
     }
 
     public function storeTeam(Request $request) {
+            $validatedData = $request->validate([
+                'name' => ['required', 'max:50']
+            ]);
+
             $response = Http::post(env('API_URL') . '/api/teams/create', [
-                'name' => $request->name
+                'name' => $validatedData['name']
             ]);
             if($response->successful()) {
                 Session::put('team', $response->object()->team);
@@ -67,7 +71,7 @@ class Controller extends BaseController
 
     public function scoreboard(Request $request) {
         $Team = Http::get(env('API_URL') . '/api/team/' . Session::get('team')->id)->object();
-        $Teams = Http::get(env('API_URL') . '/api/teams')->object();
+        $Teams = Http::get(env('API_URL') . '/api/teams')->collect()->sortByDesc('points');
 
         return view('scoreboard', [
             'Team' => $Team,

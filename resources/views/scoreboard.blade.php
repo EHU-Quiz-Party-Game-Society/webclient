@@ -21,14 +21,14 @@
         <tbody>
         @foreach($Teams as $Client)
             @if($Team)
-                @if($Client->id == $Team->id)
+                @if($Client['id'] == $Team->id)
                 <tr class="correct">
                 @else
                 <tr>
                 @endif
             @endif
-                    <td>{{$Client->name}}</td>
-                    <td>{{$Client->points}}</td>
+                    <td>{{$Client['name']}}</td>
+                    <td>{{$Client['points']}}</td>
                 </tr>
         @endforeach
         </tbody>
