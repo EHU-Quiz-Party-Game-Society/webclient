@@ -81,8 +81,10 @@ class Controller extends BaseController
 
     public function logout() {
         //Delete team from Database
-        $response = Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
-        Session::remove('team');
+        if(Session::get('team')) {
+            Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
+            Session::remove('team');
+        }
 
         //For good measure, log out anyone logged in on this device
         Auth::logout();
@@ -107,5 +109,11 @@ class Controller extends BaseController
             return back()->with('warning', "Error. Please see society staff" . $exception);
         }
 
+    }
+
+    public function bingo(Request $request) {
+        return view('bingo', [
+            'Sheet' => $request->sheet
+        ]);
     }
 }
