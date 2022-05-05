@@ -20,3 +20,4 @@ Route::post('/team/store', [Controller::class, 'storeTeam'])->name('storeTeam');
 Route::post('/teams/logout', [Controller::class, 'logout'])->name('teams.logout');
 Route::post('/quiz/send', [Controller::class, 'sendData'])->name('sendData');
 Route::get('/scoreboard', [Controller::class, 'scoreboard'])->name('quiz.live.scoreboard');
+Route::get('/bingo', [Controller::class, 'bingo'])->name('bingo');

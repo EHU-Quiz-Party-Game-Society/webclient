@@ -12,9 +12,15 @@
     @endforeach
     <form method="post" action="{{route('storeTeam')}}">
         @csrf
-        <label for="TeamName">Please choose a team name! (Max 50. chars)</label>
-        <input type="text" name="name" minlength="3" maxlength="50" class="form-control border-dark" style="margin-bottom: 10px">
+        <label for="name">Please choose a team name! (Max 50. chars)</label>
+        <input type="text" name="name" id="name" minlength="3" maxlength="50" class="form-control border-dark" style="margin-bottom: 10px">
         <button type="submit" class="btn btn-block btn-success">Join Quiz!</button>
+    </form>
+    <hr>
+    <form method="get" action="{{route('bingo')}}">
+        <label for="sheet">Bingo Sheet ID</label>
+        <input type="text" name="sheet" id="sheet" minlength="3" maxlength="50" class="form-control border-dark" style="margin-bottom: 10px">
+        <button type="submit" class="btn btn-block btn-success">Join Bingo!</button>
     </form>
     </div>
 @endsection

@@ -91,6 +91,17 @@
                 </form>
             </div>
     </section>
+
+    <section id="bingocard">
+        <form action="#" class="logo">
+            <input type="text" name="code" id="code">
+            <button name="find" onclick="BingoCard()">Find</button>
+        </form>
+
+        <div id="cardimg">
+
+        </div>
+    </section>
 @endsection
 @section('footer')
 <script>

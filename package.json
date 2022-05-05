@@ -1,5 +1,6 @@
 {
     "private": true,
+    "type": "module",
     "scripts": {
         "dev": "npm run development",
         "development": "mix",
@@ -16,6 +17,7 @@
         "postcss": "^8.1.14"
     },
     "dependencies": {
+        "dotenv": "^16.0.0",
         "laravel-echo": "^1.11.3",
         "pusher-js": "^7.0.6"
     }
