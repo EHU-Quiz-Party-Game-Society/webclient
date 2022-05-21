@@ -41,9 +41,6 @@ Echo.channel(`quiz`)
         document.getElementById("numberChoice").style.display = "none"
         document.getElementById("letters").style.display = "none"
     })
-    .listen('.bingo', () => {
-        location.reload();
-    })
 
 
 function dis(val)

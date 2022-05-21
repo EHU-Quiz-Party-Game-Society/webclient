@@ -15,8 +15,8 @@
     </header>
 
     <div id="bingocard">
-        <div id="cardimg">
-            <img src="{{env('API_URL')}}/bingo/sheet/{{$Sheet}}" width="100%">
+        <div id="bingosheet">
+            <img id="bingo-img" src="{{env('API_URL')}}/bingo/sheet/{{$Sheet}}" width="100%">
         </div>
     </div>
 @endsection
@@ -27,5 +27,10 @@
             $('#alert').fadeOut('fast');
         }, 3000);
         @endif
+
+        Echo.channel(`quiz`)
+        .listen('.bingo', () => {
+            document.getElementById("bingo-img").src = "{{env('API_URL')}}/bingo/sheet/{{$Sheet}}?random=" + new Date().getTime();
+        })
     </script>
 @endsection
