@@ -29,8 +29,8 @@
         @endif
 
         Echo.channel(`quiz`)
-        .listen('.bingo', () => {
-            document.getElementById("bingo-img").src = "{{env('API_URL')}}/bingo/sheet/{{$Sheet}}?random=" + new Date().getTime();
+        .listen('.bingo', (data) => {
+            document.getElementById("bingo-img").src = "{{env('API_URL')}}/bingo/sheet/{{$Sheet}}?random=" + new Date().getTime() + "&line=" + data.lines;
         })
     </script>
 @endsection
