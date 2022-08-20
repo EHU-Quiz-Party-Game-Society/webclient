@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 .logo {
     position: absolute;
     left: 50%;
@@ -94,5 +99,35 @@
 .flex {
     display: flex;
     justify-content: space-around;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#bingosheet {
+    display: grid;
+    height: 100%;
+}
+
+.center-fit {
+    max-width: 100%;
+    /**max-height: 90vh;**/
+    margin: auto;
+}
+
+/* Font Face for Bingo Image Generation */
+@font-face {
+    font-family: bingo;
+    src: url('/fonts/bingo.ttf');
+}
+@font-face {
+    font-family: sunday;
+    src: url('/fonts/sunday.ttf');
+}
+@font-face {
+    font-family: altone;
+    src: url('/fonts/altone.ttf');
 }
 

@@ -20,6 +20,7 @@
     {{--Import Laravel Echo--}}
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('/js/quizclient.js') }}"></script>
+    <script src="{{ asset('/js/bingo.js') }}"></script>
 </head>
 <body>
 {{-- Session Alerts --}}

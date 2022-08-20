@@ -33,14 +33,4 @@
         @endforeach
         </tbody>
     </table>
-
-@endsection
-@section('footer')
-    <script>
-        @if (Session::has('success'))
-        setTimeout(function() {
-            $('#alert').fadeOut('fast');
-        }, 3000);
-        @endif
-    </script>
 @endsection

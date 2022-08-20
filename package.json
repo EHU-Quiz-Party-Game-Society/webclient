@@ -14,11 +14,12 @@
     "devDependencies": {
         "axios": "^0.25",
         "laravel-mix": "^6.0.6",
-        "lodash": "^4.17.19",
         "postcss": "^8.1.14"
     },
     "dependencies": {
+        "fabric": "^5.2.1",
         "laravel-echo": "^1.11.3",
+        "lodash": "^4.17.21",
         "pusher-js": "^7.0.6"
     }
 }
