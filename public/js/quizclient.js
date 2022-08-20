@@ -42,7 +42,6 @@ Echo.channel(`quiz`)
         document.getElementById("letters").style.display = "none"
     })
 
-
 function dis(val)
 {
     document.getElementById("result").innerHTML+=val //Display to Client
@@ -54,3 +53,7 @@ function clr()
     document.getElementById("result").innerHTML = "" //Display to Client
     document.getElementById("calculator-grid-result").value = "" //Response to Server
 }
+
+setTimeout(function() {
+    $('#alert').fadeOut('fast');
+}, 3000);
