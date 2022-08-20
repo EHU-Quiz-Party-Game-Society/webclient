@@ -26,7 +26,6 @@ function showSheet(data) {
         jQuery.ajax({
             url: 'https://ehuquizsociety.com/api/bingo/sheet/' + sheet,
         }).then(function (bingoData) {
-            console.log(bingoData);
             //Sort cards by x away
             if(lines) {
                 for(let i = 0; i < 6; i++) {
@@ -80,7 +79,7 @@ function showSheet(data) {
 
                     //Only calculate x away if there are lines provided, this prevents un-necessary processing at the start of the game
                     if(lines) {
-                        awayCounter(bingoData[i], ctx, bingo, lines, away_y);
+                        awayCounter(bingoData[i], ctx, bingo, lines, bingoData[i].away, away_y);
                     }
 
                     away_y += 201;
@@ -118,8 +117,7 @@ function insertNumber(ctx, bingo, value, x, y) {
 }
 
 
-function awayCounter(card, ctx, bingo, lines, away_y) {
-    let away = calculateAway(card, bingo, lines);
+function awayCounter(card, ctx, bingo, lines, away, away_y) {
     ctx.font = '20px sunday';
     ctx.fillStyle = "white";
     ctx.fillText(away + " away", 200, away_y);
@@ -132,14 +130,15 @@ function calculateAway(card, bingo, lines) {
     let line_three = 5;
 
     //Go through each number in each line and check if it's been called. If so, subtract from the line count.
-    for(let i = 0; i < 6; i++) {
-        if(card.data.one[i] && bingo[card.data.one[i]].called === 1) {
+    //16 is the number of numbers in a card (3x5) + 1 to account for arrays starting at 0.
+    for(let i = 0; i < 16; i++) {
+        if(card.data.one[i] && bingo[card.data.one[i] - 1].called === 1) {
             line_one--;
         }
-        if(card.data.two[i] && bingo[card.data.two[i]].called === 1) {
+        if(card.data.two[i] && bingo[card.data.two[i] - 1].called === 1) {
             line_two--;
         }
-        if(card.data.three[i] && bingo[card.data.three[i]].called === 1) {
+        if(card.data.three[i] && bingo[card.data.three[i] - 1].called === 1) {
             line_three--;
         }
     }
@@ -151,6 +150,7 @@ function calculateAway(card, bingo, lines) {
         away.sort();
         return Math.min(...[line_one, line_two, line_three]) + away[1];
     } else {
+        console.log("TEST");
         let x = 15 - line_one - line_two - line_three;
         return 15 - x;
     }
