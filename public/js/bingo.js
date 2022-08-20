@@ -17,7 +17,7 @@ function showSheet(data) {
     let bingo;
 
     jQuery.ajax({
-        url: 'http://quizsociety.test/api/bingo/sheet/' + sheet,
+        url: 'https://ehuquizsociety.com/api/bingo/sheet/' + sheet,
         success: function (result) {
             bingoData = result;
         },
@@ -25,11 +25,7 @@ function showSheet(data) {
     });
 
     jQuery.ajax({
-        url: 'http://quizsociety.test/api/bingo/',
-        options: {
-            type: 'GET',
-            origin: 'http://quizsociety.test',
-        },
+        url: 'https://ehuquizsociety.com/api/bingo/',
         success: function (result) {
             bingo = result;
         },
