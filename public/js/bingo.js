@@ -147,10 +147,11 @@ function calculateAway(card, bingo, lines) {
         return Math.min(...[line_one, line_two, line_three]);
     } else if (lines === 2) {
         let away = [line_one, line_two, line_three];
-        away.sort();
+        away.sort(function (x, y) {
+            return x - y;
+        });
         return Math.min(...[line_one, line_two, line_three]) + away[1];
     } else {
-        console.log("TEST");
         let x = 15 - line_one - line_two - line_three;
         return 15 - x;
     }
