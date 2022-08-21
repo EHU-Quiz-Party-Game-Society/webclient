@@ -122,7 +122,7 @@ function showSheet(data, sheet) {
 
                 //Only calculate x away if there are lines provided, this prevents un-necessary processing at the start of the game
                 if(lines) {
-                    awayCounter(sheet[i], ctx, bingo, lines, sheet[i].away, away_y);
+                    awayCounter(ctx, sheet[i].away, away_y);
                 }
 
                 away_y += 201;
@@ -159,7 +159,7 @@ function insertNumber(ctx, bingo, value, x, y) {
 }
 
 
-function awayCounter(card, ctx, bingo, lines, away, away_y) {
+function awayCounter(ctx, away, away_y) {
     ctx.font = '20px sunday';
     ctx.fillStyle = "white";
     ctx.fillText(away + " away", 200, away_y);
