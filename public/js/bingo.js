@@ -7,6 +7,17 @@ window.onload = function() {
     showSheet();
 }
 
+//Load fonts
+const bingoFont = new FontFace('bingo', 'url(/fonts/bingo.ttf)');
+bingoFont.load().then((font) => {
+    document.fonts.add(font);
+});
+const sundayFont = new FontFace('sunday', 'url(/fonts/sunday.ttf)');
+sundayFont.load().then((font) => {
+    document.fonts.add(font);
+});
+
+
 function showSheet(data) {
     console.log((new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
     const url_string = window.location.href;
@@ -184,8 +195,9 @@ function calculateAway(card, bingo, lines) {
 
 function drawCompleteLineIndicator(ctx, x, y) {
     ctx.beginPath();
-    ctx.roundRect(x, y - 32, 440, 40, 10);
-    ctx.fillStyle = "rgba(128, 128, 128, 0.6)";
+    //ctx.roundRect(x, y - 32, 440, 40, 10);
+    ctx.rect(x, y - 32, 440, 40);
+    ctx.fillStyle = "rgba(128, 128, 128, 0.5)";
     ctx.fill();
     ctx.lineWidth = 1;
     ctx.strokeStyle = '#808080';
