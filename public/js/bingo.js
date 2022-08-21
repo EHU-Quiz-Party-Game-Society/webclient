@@ -54,28 +54,53 @@ function showSheet(data) {
                     ctx.fillText("Sheet: " + bingoData[i].sheet, 50, identifier_y);
                     ctx.fillText("Code: " + bingoData[i].code, 350, identifier_y);
                     identifier_y += 201;
+                    let numbersCalledInLine = 0;
 
                     //Insert numbers for top row
                     for (let i2 = 0; i2 < bingoData[i].data.one.length; i2++) {
                         insertNumber(ctx, bingo, bingoData[i].data.one[i2], x, y);
                         x += 49;
+
+                        if(bingoData[i].data.one[i2] && bingo[bingoData[i].data.one[i2] - 1].called === 1) {
+                            numbersCalledInLine++;
+                            if(numbersCalledInLine === 5) {
+                                drawCompleteLineIndicator(ctx, 30, y);
+                            }
+                        }
                     }
 
                     x = 38;
                     y += 50;
+                    numbersCalledInLine = 0;
                     //Insert numbers for middle row
                     for (let i2 = 0; i2 < bingoData[i].data.two.length; i2++) {
                         insertNumber(ctx, bingo, bingoData[i].data.two[i2], x, y);
                         x += 49;
+
+                        if(bingoData[i].data.two[i2] && bingo[bingoData[i].data.two[i2] - 1].called === 1) {
+                            numbersCalledInLine++;
+                            if(numbersCalledInLine === 5) {
+                                drawCompleteLineIndicator(ctx, 30, y);
+                            }
+                        }
                     }
 
                     x = 38;
                     y += 50;
-                    //Insert numbers for middle row
+                    numbersCalledInLine = 0;
+                    //Insert numbers for bottom row
                     for (let i2 = 0; i2 < bingoData[i].data.three.length; i2++) {
                         insertNumber(ctx, bingo, bingoData[i].data.three[i2], x, y);
                         x += 49;
+
+                        if(bingoData[i].data.three[i2] && bingo[bingoData[i].data.three[i2] - 1].called === 1) {
+                            numbersCalledInLine++;
+                            if(numbersCalledInLine === 5) {
+                                drawCompleteLineIndicator(ctx, 30, y);
+                            }
+                        }
                     }
+
 
                     //Only calculate x away if there are lines provided, this prevents un-necessary processing at the start of the game
                     if(lines) {
@@ -155,4 +180,15 @@ function calculateAway(card, bingo, lines) {
         let x = 15 - line_one - line_two - line_three;
         return 15 - x;
     }
+}
+
+function drawCompleteLineIndicator(ctx, x, y) {
+    ctx.beginPath();
+    ctx.roundRect(x, y - 32, 440, 40, 10);
+    ctx.fillStyle = "rgba(128, 128, 128, 0.6)";
+    ctx.fill();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#808080';
+    ctx.opacity = 0.5;
+    ctx.stroke();
 }
