@@ -1,10 +1,23 @@
+let sheetData;
+
 Echo.channel(`quiz`)
     .listen('.bingo', (data) => {
-        showSheet(data);
+        showSheet(data, sheetData);
     })
 
 window.onload = function() {
-    showSheet();
+    const url_string = window.location.href;
+    const url = new URL(url_string);
+    const sheet = url.searchParams.get("sheet");
+
+    jQuery.ajax({
+        url: 'https://ehuquizsociety.com/api/bingo/sheet/' + sheet,
+    }).then(function (sheet) {
+        sheetData = sheet;
+        showSheet(null, sheet);
+    }).fail(function (error) {
+        console.error(error);
+    });
 }
 
 //Load fonts
@@ -18,11 +31,9 @@ sundayFont.load().then((font) => {
 });
 
 
-function showSheet(data) {
-    console.log((new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+function showSheet(data, sheet) {
     const url_string = window.location.href;
     const url = new URL(url_string);
-    const sheet = url.searchParams.get("sheet");
     let lines = 0;
 
     if(data) {
@@ -34,97 +45,92 @@ function showSheet(data) {
     jQuery.ajax({
         url: 'https://ehuquizsociety.com/api/bingo/',
     }).then(function (bingo) {
-        jQuery.ajax({
-            url: 'https://ehuquizsociety.com/api/bingo/sheet/' + sheet,
-        }).then(function (bingoData) {
-            //Sort cards by x away
-            if(lines) {
-                for(let i = 0; i < 6; i++) {
-                    bingoData[i]['away'] = calculateAway(bingoData[i], bingo, lines);
-                }
-
-                // sort by salary
-                bingoData.sort(function (x, y) {
-                    return x.away - y.away;
-                });
+        //Sort cards by x away
+        if(lines) {
+            for(let i = 0; i < 6; i++) {
+                sheet[i]['away'] = calculateAway(sheet[i], bingo, lines);
             }
 
-            const ctx = document.getElementById('bingo-canvas').getContext('2d');
-            const img = new Image();
-            img.onload = () => {
-                ctx.drawImage(img, 0, 0);
-                let x = 38; //X position of number
-                let y = 63;
-                let identifier_y = 20;
-                let away_y = 192;
+            sheet.sort(function (x, y) {
+                return x.away - y.away;
+            });
+        }
 
-                for(let i = 0; i < bingoData.length; i++) {
-                    //Add in Sheet Identifier
-                    ctx.font = '20px sunday';
-                    ctx.fillStyle = "white";
-                    ctx.fillText("Sheet: " + bingoData[i].sheet, 50, identifier_y);
-                    ctx.fillText("Code: " + bingoData[i].code, 350, identifier_y);
-                    identifier_y += 201;
-                    let numbersCalledInLine = 0;
+        const ctx = document.getElementById('bingo-canvas').getContext('2d');
+        const img = new Image();
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0);
+            let x = 38; //X position of number
+            let y = 63;
+            let identifier_y = 20;
+            let away_y = 192;
 
-                    //Insert numbers for top row
-                    for (let i2 = 0; i2 < bingoData[i].data.one.length; i2++) {
-                        insertNumber(ctx, bingo, bingoData[i].data.one[i2], x, y);
-                        x += 49;
+            for(let i = 0; i < sheet.length; i++) {
+                //Add in Sheet Identifier
+                ctx.font = '20px sunday';
+                ctx.fillStyle = "white";
+                ctx.fillText("Sheet: " + sheet[i].sheet, 50, identifier_y);
+                ctx.fillText("Code: " + sheet[i].code, 350, identifier_y);
+                identifier_y += 201;
+                let numbersCalledInLine = 0;
 
-                        if(bingoData[i].data.one[i2] && bingo[bingoData[i].data.one[i2] - 1].called === 1) {
-                            numbersCalledInLine++;
-                            if(numbersCalledInLine === 5) {
-                                drawCompleteLineIndicator(ctx, 30, y);
-                            }
+                //Insert numbers for top row
+                for (let i2 = 0; i2 < sheet[i].data.one.length; i2++) {
+                    insertNumber(ctx, bingo, sheet[i].data.one[i2], x, y);
+                    x += 49;
+
+                    if(sheet[i].data.one[i2] && bingo[sheet[i].data.one[i2] - 1].called === 1) {
+                        numbersCalledInLine++;
+                        if(numbersCalledInLine === 5) {
+                            drawCompleteLineIndicator(ctx, 30, y);
                         }
                     }
-
-                    x = 38;
-                    y += 50;
-                    numbersCalledInLine = 0;
-                    //Insert numbers for middle row
-                    for (let i2 = 0; i2 < bingoData[i].data.two.length; i2++) {
-                        insertNumber(ctx, bingo, bingoData[i].data.two[i2], x, y);
-                        x += 49;
-
-                        if(bingoData[i].data.two[i2] && bingo[bingoData[i].data.two[i2] - 1].called === 1) {
-                            numbersCalledInLine++;
-                            if(numbersCalledInLine === 5) {
-                                drawCompleteLineIndicator(ctx, 30, y);
-                            }
-                        }
-                    }
-
-                    x = 38;
-                    y += 50;
-                    numbersCalledInLine = 0;
-                    //Insert numbers for bottom row
-                    for (let i2 = 0; i2 < bingoData[i].data.three.length; i2++) {
-                        insertNumber(ctx, bingo, bingoData[i].data.three[i2], x, y);
-                        x += 49;
-
-                        if(bingoData[i].data.three[i2] && bingo[bingoData[i].data.three[i2] - 1].called === 1) {
-                            numbersCalledInLine++;
-                            if(numbersCalledInLine === 5) {
-                                drawCompleteLineIndicator(ctx, 30, y);
-                            }
-                        }
-                    }
-
-
-                    //Only calculate x away if there are lines provided, this prevents un-necessary processing at the start of the game
-                    if(lines) {
-                        awayCounter(bingoData[i], ctx, bingo, lines, bingoData[i].away, away_y);
-                    }
-
-                    away_y += 201;
-                    x = 38;
-                    y += 101;
                 }
-            };
-            img.src = '/images/BingoSheetBackground.png';
-        });
+
+                x = 38;
+                y += 50;
+                numbersCalledInLine = 0;
+                //Insert numbers for middle row
+                for (let i2 = 0; i2 < sheet[i].data.two.length; i2++) {
+                    insertNumber(ctx, bingo, sheet[i].data.two[i2], x, y);
+                    x += 49;
+
+                    if(sheet[i].data.two[i2] && bingo[sheet[i].data.two[i2] - 1].called === 1) {
+                        numbersCalledInLine++;
+                        if(numbersCalledInLine === 5) {
+                            drawCompleteLineIndicator(ctx, 30, y);
+                        }
+                    }
+                }
+
+                x = 38;
+                y += 50;
+                numbersCalledInLine = 0;
+                //Insert numbers for bottom row
+                for (let i2 = 0; i2 < sheet[i].data.three.length; i2++) {
+                    insertNumber(ctx, bingo, sheet[i].data.three[i2], x, y);
+                    x += 49;
+
+                    if(sheet[i].data.three[i2] && bingo[sheet[i].data.three[i2] - 1].called === 1) {
+                        numbersCalledInLine++;
+                        if(numbersCalledInLine === 5) {
+                            drawCompleteLineIndicator(ctx, 30, y);
+                        }
+                    }
+                }
+
+
+                //Only calculate x away if there are lines provided, this prevents un-necessary processing at the start of the game
+                if(lines) {
+                    awayCounter(ctx, sheet[i].away, away_y);
+                }
+
+                away_y += 201;
+                x = 38;
+                y += 101;
+            }
+        };
+        img.src = '/images/BingoSheetBackground.png';
     });
 }
 
@@ -153,7 +159,7 @@ function insertNumber(ctx, bingo, value, x, y) {
 }
 
 
-function awayCounter(card, ctx, bingo, lines, away, away_y) {
+function awayCounter(ctx, away, away_y) {
     ctx.font = '20px sunday';
     ctx.fillStyle = "white";
     ctx.fillText(away + " away", 200, away_y);
