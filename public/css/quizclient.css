@@ -36,6 +36,24 @@
     font-size: xxx-large;
 }
 
+.fastest-finger {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    margin-top: 10px;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+}
+
+.fastest-finger > button {
+    cursor: pointer;
+    outline: none;
+    background-color: #333;
+    color: #fff;
+    border-radius: 25px;
+    font-size: xxx-large;
+}
+
 .letters-grid {
     display: grid;
     justify-content: center;
@@ -126,8 +144,3 @@ img {
     font-family: sunday;
     src: url('/fonts/sunday.ttf');
 }
-@font-face {
-    font-family: altone;
-    src: url('/fonts/altone.ttf');
-}
-

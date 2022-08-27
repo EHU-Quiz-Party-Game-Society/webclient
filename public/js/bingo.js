@@ -119,7 +119,6 @@ function showSheet(data, sheet) {
                     }
                 }
 
-
                 //Only calculate x away if there are lines provided, this prevents un-necessary processing at the start of the game
                 if(lines) {
                     awayCounter(ctx, sheet[i].away, away_y);

@@ -107,7 +107,7 @@ class Controller extends BaseController
                 return back()->with('danger', $response->object()->message);
             }
         } catch(\Exception $exception) {
-            return back()->with('warning', "Error. Please see society staff" . $exception);
+            return back()->with('warning', "Error. Please see society staff: " . $exception->getMessage());
         }
 
     }

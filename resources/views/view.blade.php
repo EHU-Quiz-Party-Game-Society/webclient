@@ -23,7 +23,7 @@
     <form method="post" action="{{route('sendData')}}">@csrf
         <input type="hidden" name="session_id" value="{{$Team->session}}">
         <section class="option-grid" id="multipleChoice" style="display: none">
-            <input type="hidden" name="question" id="questionForMultipleChoice">
+            <input type="hidden" name="question">
             <button name="answer" value="A">A</button>
             <button name="answer" value="B">B</button>
             <button name="answer" value="C">C</button>
@@ -34,9 +34,17 @@
     </form>
 
     <form method="post" action="{{route('sendData')}}">@csrf
+        <input type="hidden" name="session_id" value="{{$Team->session}}">
+        <section class="fastest-finger" id="fastestFinger" style="display: none">
+            <input type="hidden" name="question">
+            <button name="answer" value="@php echo date("H:i:s"); @endphp"><i class="fa-solid fa-hand-pointer"></i></button>
+        </section>
+    </form>
+
+    <form method="post" action="{{route('sendData')}}">@csrf
         <section class="letters-grid" id="letters" style="display: none">
             <input type="hidden" name="session_id" value="{{$Team->session}}">
-            <input type="hidden" name="question" id="questionForLetters">
+            <input type="hidden" name="question">
             <button name="answer" value="A">A</button>
             <button name="answer" value="B">B</button>
             <button name="answer" value="C">C</button>
@@ -85,7 +93,7 @@
                 <button class="option" onclick="clr()">Clear</button>
                 <button value="9" onclick="dis('0')">0</button>
                 <form method="post" action="{{route('sendData')}}" class="grid">@csrf
-                    <input type="hidden" name="question" id="questionForNumberGrid">
+                    <input type="hidden" name="question">
                     <input type="hidden" name="answer" id="calculator-grid-result">
                     <button type="submit" class="submit-option">GO</button>
                 </form>

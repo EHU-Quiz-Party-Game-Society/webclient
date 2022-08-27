@@ -3,15 +3,17 @@ const urlParams = new URLSearchParams(queryString);
 
 Echo.channel(`quiz`)
     .listen('.send', (data) => {
-        document.getElementById("questionForMultipleChoice").value = data.question.id;
-        document.getElementById("questionForNumberGrid").value = data.question.id;
-        document.getElementById("questionForLetters").value = data.question.id;
+        document.getElementsByName("question").forEach(function (element) {
+            element.value = data.question.id;
+        });
+
         if(data.question.type === 1) //Multiple Choice
         {
             document.getElementById("logo").style.display = "none"
             document.getElementById("multipleChoice").style.display = "grid"
             document.getElementById("numberChoice").style.display = "none"
             document.getElementById("letters").style.display = "none"
+            document.getElementById("fastestFinger").style.display = "none"
         }
         if(data.question.type === 2) //Fastest Finger
         {
@@ -19,6 +21,7 @@ Echo.channel(`quiz`)
             document.getElementById("multipleChoice").style.display = "none"
             document.getElementById("numberChoice").style.display = "none"
             document.getElementById("letters").style.display = "none"
+            document.getElementById("fastestFinger").style.display = "grid"
         }
         if(data.question.type === 3) //Number
         {
@@ -26,6 +29,7 @@ Echo.channel(`quiz`)
             document.getElementById("multipleChoice").style.display = "none"
             document.getElementById("numberChoice").style.display = "initial"
             document.getElementById("letters").style.display = "none"
+            document.getElementById("fastestFinger").style.display = "none"
         }
         if(data.question.type === 4) //Letters
         {
@@ -33,6 +37,7 @@ Echo.channel(`quiz`)
             document.getElementById("multipleChoice").style.display = "none"
             document.getElementById("numberChoice").style.display = "none"
             document.getElementById("letters").style.display = "grid"
+            document.getElementById("fastestFinger").style.display = "none"
         }
     })
     .listen('.logo', () => {
@@ -40,6 +45,7 @@ Echo.channel(`quiz`)
         document.getElementById("multipleChoice").style.display = "none"
         document.getElementById("numberChoice").style.display = "none"
         document.getElementById("letters").style.display = "none"
+        document.getElementById("fastestFinger").style.display = "none"
     })
 
 function dis(val)
