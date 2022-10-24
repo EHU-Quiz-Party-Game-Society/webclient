@@ -91,14 +91,11 @@ class Controller extends BaseController
     public function logout() {
         //Delete team from Database
         if(Session::get('team')) {
-            //Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
-            //Session::remove('team');
+            Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
+            Session::remove('team');
         }
 
-        //For good measure, log out anyone logged in on this device
-        //Auth::logout();
-
-        return redirect('/');
+        return redirect('/')->with('info', 'You have been logged out');
     }
 
     public function sendData(Request $request) {
