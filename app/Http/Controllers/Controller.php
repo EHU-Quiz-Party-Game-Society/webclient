@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -10,7 +12,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Session;
-use PhpParser\Node\Stmt\Echo_;
 
 class Controller extends BaseController
 {
@@ -18,20 +19,23 @@ class Controller extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function live(Request $request)
     {
-        try {
-            $team = Http::get(env('API_URL') . '/api/team/' . Session::get('team')->id);
-        } catch(\Exception $exception) {
+        if(Session::get('team') === null) {
             return view('chooseteam');
         }
+
+        $team = Session::get('team');
         //Check if player has selected a team name. If not, redirect them.
-        if ($team->successful()) { //Check if team exists
-            if ($team->object()->status != 1) { //Check if team is approved
+        if ($team->status !== 2) { //Check if team exists
+            $team = Http::get(env('API_URL') . '/api/team/' . Session::get('team')->id);
+            if ($team->object()->status !== 1) { //Check if team is approved
+                Session::put('team', $team->object());
                 return view('view', [
                     'Team' => $team->object()
+
                 ]);
             } else { //Keep the team in the waiting room
                 return view('waiting', [
@@ -39,7 +43,9 @@ class Controller extends BaseController
                 ]);
             }
         } else {
-            return view('chooseteam');
+            return view('view', [
+                'Team' => $team
+            ]);
         }
     }
 
@@ -62,7 +68,9 @@ class Controller extends BaseController
             $response = Http::post(env('API_URL') . '/api/teams/create', [
                 'name' => $validatedData['name']
             ]);
-            if($response->successful()) {
+
+            if($response->status() === 200 || $response->status() === 201) {
+
                 Session::put('team', $response->object()->team);
                 return redirect(route('quiz.live'));
             } else {
@@ -83,12 +91,12 @@ class Controller extends BaseController
     public function logout() {
         //Delete team from Database
         if(Session::get('team')) {
-            Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
-            Session::remove('team');
+            //Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
+            //Session::remove('team');
         }
 
         //For good measure, log out anyone logged in on this device
-        Auth::logout();
+        //Auth::logout();
 
         return redirect('/');
     }

@@ -1,4 +1,7 @@
 @extends('layouts.live')
+@section('scripts')
+    <script src="{{ asset('/js/bingo.js') }}"></script>
+@endsection
 @section('title')
     Bingo
 @endsection

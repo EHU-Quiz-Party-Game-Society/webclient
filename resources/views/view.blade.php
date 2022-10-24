@@ -1,11 +1,14 @@
 @extends('layouts.live')
+@section('scripts')
+    <script src="{{ asset('/js/quizclient.js') }}"></script>
+@endsection
 @section('title')
     Live Quiz
 @endsection
 @section('content')
     <!-- Navbar / Header -->
     <header class="navbar navbar-expand navbar-dark bg-dark" style="padding: 10px">
-        <span style="color: #fff"><i class="fas fa-users"></i> {{$Team->name}} | ID: {{$Team->id}} | <i class="fas fa-trophy"></i> {{$Team->points}}</span>
+        <span style="color: #fff"><i class="fas fa-users"></i> {{$Team->name}} | ID: {{$Team->id}}</span>
         <div style="margin-left: auto!important;">
             <a href="https://ehuquizsociety.com" class="btn btn-info" data-toggle="tooltip" title="Home"><i class="fa fa-fw fa-home"></i></a>
             <a href="{{route('quiz.live.scoreboard')}}" class="btn btn-warning" data-toggle="tooltip" title="Scoreboard"><i class="fa fa-fw fa-trophy"></i></a>
