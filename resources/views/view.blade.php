@@ -12,9 +12,6 @@
         <div style="margin-left: auto!important;">
             <a href="https://ehuquizsociety.com" class="btn btn-info" data-toggle="tooltip" title="Home"><i class="fa fa-fw fa-home"></i></a>
             <a href="{{route('quiz.live.scoreboard')}}" class="btn btn-warning" data-toggle="tooltip" title="Scoreboard"><i class="fa fa-fw fa-trophy"></i></a>
-            <form method="post" action="{{route('teams.logout')}}" style="display: inline">@csrf
-                <button class="btn btn-danger" data-toggle="tooltip" title="Sign Out"><i class="fa fa-fw fa-sign-out-alt"></i> Leave</button>
-            </form>
         </div>
     </header>
 
