@@ -1,10 +1,8 @@
 @extends('layouts.live')
-@section('head')
+@section('scripts')
     <script src="{{ asset('/js/quizclient.js') }}"></script>
 @endsection
-@section('title')
-    Live Quiz
-@endsection
+@section('title', "Live Quiz")
 @section('content')
     <!-- Navbar / Header -->
     <header class="navbar navbar-expand navbar-dark bg-dark" style="padding: 10px">

@@ -28,7 +28,7 @@ class Controller extends BaseController
     public function live(Request $request): View
     {
         try {
-            $team = Http::get(env('API_URL') . '/api/team/' . Session::get('team')->id);
+            $team = Http::withOptions(['verify' => false])->get(env('API_URL') . '/api/team/' . Session::get('team')->id);
         } catch(\Exception $exception) {
             return view('chooseteam');
         }
@@ -64,9 +64,11 @@ class Controller extends BaseController
             'name' => ['required', 'max:50']
         ]);
 
-        $response = Http::post(env('API_URL') . '/api/teams/create', [
+        $response = Http::withOptions(['verify' => false])->post(env('API_URL') . '/api/teams/create', [
             'name' => $validatedData['name']
         ]);
+
+        //dd($response);
         if($response->successful()) {
             Session::put('team', $response->object()->team);
             return redirect(route('quiz.live'));
