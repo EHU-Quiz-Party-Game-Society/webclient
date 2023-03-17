@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -18,9 +23,9 @@ class Controller extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function live(Request $request)
+    public function live(Request $request): View
     {
         try {
             $team = Http::get(env('API_URL') . '/api/team/' . Session::get('team')->id);
@@ -55,22 +60,22 @@ class Controller extends BaseController
     }
 
     public function storeTeam(Request $request) {
-            $validatedData = $request->validate([
-                'name' => ['required', 'max:50']
-            ]);
+        $validatedData = $request->validate([
+            'name' => ['required', 'max:50']
+        ]);
 
-            $response = Http::post(env('API_URL') . '/api/teams/create', [
-                'name' => $validatedData['name']
-            ]);
-            if($response->successful()) {
-                Session::put('team', $response->object()->team);
-                return redirect(route('quiz.live'));
-            } else {
-                return back()->withErrors($response->object()->message ?? 'API Unreachable. Please see a member of society staff');
-            }
+        $response = Http::post(env('API_URL') . '/api/teams/create', [
+            'name' => $validatedData['name']
+        ]);
+        if($response->successful()) {
+            Session::put('team', $response->object()->team);
+            return redirect(route('quiz.live'));
+        } else {
+            return back()->withErrors($response->object()->message ?? 'API Unreachable. Please see a member of society staff');
+        }
     }
 
-    public function scoreboard(Request $request) {
+    public function scoreboard(Request $request): View {
         $Team = Http::get(env('API_URL') . '/api/team/' . Session::get('team')->id)->object();
         $Teams = Http::get(env('API_URL') . '/api/teams')->collect()->sortByDesc('points');
 
@@ -80,7 +85,8 @@ class Controller extends BaseController
         ]);
     }
 
-    public function logout() {
+    public function logout(): Redirector
+    {
         //Delete team from Database
         if(Session::get('team')) {
             Http::delete(env('API_URL') . '/api/team/delete?session_id=' . Session::get('team')->session);
@@ -93,7 +99,7 @@ class Controller extends BaseController
         return redirect('/');
     }
 
-    public function sendData(Request $request) {
+    public function sendData(Request $request): RedirectResponse {
         $response = Http::post(env('API_URL') . '/api/quiz/send', [
             'question' => $request->question,
             'answer' => $request->answer,
@@ -112,7 +118,7 @@ class Controller extends BaseController
 
     }
 
-    public function bingo(Request $request) {
+    public function bingo(Request $request): View {
         return view('bingo', [
             'Sheet' => $request->sheet
         ]);

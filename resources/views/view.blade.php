@@ -1,4 +1,7 @@
 @extends('layouts.live')
+@section('head')
+    <script src="{{ asset('/js/quizclient.js') }}"></script>
+@endsection
 @section('title')
     Live Quiz
 @endsection
