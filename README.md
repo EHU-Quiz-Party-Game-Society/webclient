@@ -1,4 +1,4 @@
-<p align="center"><a href="https://ehuquizsociety.com" target="_blank"><img src="https://i.imgur.com/yVLnn9I.png"></a></p>
+## This web client is now Archived - Please use [https://github.com/EHU-Quiz-Party-Game-Society/newclient](https://github.com/EHU-Quiz-Party-Game-Society/newclient)
 
 ## QuizSociety WebClient
 
